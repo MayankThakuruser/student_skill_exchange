@@ -1,0 +1,239 @@
+/* =========================================================
+   Skill Swap — dark theme, amber (teach) vs cyan (learn)
+   ========================================================= */
+
+/* ---------- Design tokens ---------- */
+:root {
+  --bg:        #15131d;   /* deep ink-violet */
+  --surface:   #1e1b2a;   /* cards */
+  --surface-2: #272336;   /* inputs, hover */
+  --line:      #36314a;
+  --text:      #f1eef8;
+  --muted:     #9b95b3;
+
+  --teach:     #ffb347;   /* warm amber  → "I can teach" */
+  --teach-bg:  rgba(255, 179, 71, .14);
+  --learn:     #4de1d2;   /* neon aqua   → "I want to learn" */
+  --learn-bg:  rgba(77, 225, 210, .13);
+  --danger:    #ff7a8a;
+
+  --radius: 14px;
+  --font: "Bricolage Grotesque", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { width: min(1120px, 100% - 2rem); margin-inline: auto; }
+.muted { color: var(--muted); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+:focus-visible { outline: 2px solid var(--learn); outline-offset: 2px; }
+
+/* ---------- Header ---------- */
+.site-header { padding: 2.5rem 0 1.5rem; }
+
+.header-inner {
+  display: flex; flex-wrap: wrap; gap: 1.25rem;
+  align-items: center; justify-content: space-between;
+}
+
+.logo {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.logo span { color: var(--teach); }          /* the "Swap" half takes the warm accent */
+
+.tagline { margin: .5rem 0 0; color: var(--muted); max-width: 42ch; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  font: inherit; font-weight: 600;
+  padding: .7rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.btn:active { transform: scale(.97); }
+
+.btn-primary { background: var(--teach); color: #2a1a00; }
+.btn-primary:hover { background: #ffc470; }
+
+.btn-ghost { background: transparent; color: var(--text); border-color: var(--line); }
+.btn-ghost:hover { background: var(--surface-2); }
+
+.icon-btn {
+  background: none; border: 0; color: var(--muted);
+  font-size: 1.8rem; line-height: 1; cursor: pointer; padding: 0 .4rem;
+}
+.icon-btn:hover { color: var(--text); }
+
+/* ---------- Search + filter ---------- */
+.controls {
+  display: flex; flex-wrap: wrap; gap: .75rem;
+  margin: 1rem 0 .5rem;
+}
+.field.grow { flex: 1 1 260px; }
+
+input, select, textarea {
+  width: 100%;
+  font: inherit; color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .75rem .9rem;
+}
+input::placeholder, textarea::placeholder { color: #70698a; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--learn); }
+select { cursor: pointer; }
+textarea { resize: vertical; }
+
+.result-count { color: var(--muted); font-size: .9rem; margin: .75rem 0 1rem; }
+
+/* ---------- Card grid (CSS Grid, auto-responsive) ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.1rem;
+  padding-bottom: 4rem;
+}
+
+.card {
+  display: flex; flex-direction: column; gap: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  transition: transform .2s ease, border-color .2s ease;
+}
+.card:hover { transform: translateY(-3px); border-color: #4c4668; }
+
+/* Newly posted cards flash once so the user sees what changed */
+.card.is-new { animation: arrive .9s ease; }
+@keyframes arrive {
+  from { border-color: var(--teach); box-shadow: 0 0 0 4px var(--teach-bg); }
+  to   { border-color: var(--line);  box-shadow: 0 0 0 0 transparent; }
+}
+
+.card-head { display: flex; align-items: center; gap: .8rem; }
+
+.avatar {
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-weight: 800; color: #1b1500;
+  background: var(--teach);
+}
+.card-name { margin: 0; font-size: 1.05rem; line-height: 1.2; }
+.card-meta { margin: 0; font-size: .85rem; color: var(--muted); }
+
+/* The swap itself: two labelled rows, tinted by direction */
+.swap { display: grid; gap: .6rem; }
+.swap-row {
+  border-radius: 10px;
+  padding: .65rem .8rem;
+  border-left: 3px solid;
+}
+.swap-row.teach { background: var(--teach-bg); border-color: var(--teach); }
+.swap-row.learn { background: var(--learn-bg); border-color: var(--learn); }
+
+.swap-label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: .35rem; }
+.teach .swap-label { color: var(--teach); }
+.learn .swap-label { color: var(--learn); }
+
+.badges { display: flex; flex-wrap: wrap; gap: .35rem; }
+.badge {
+  font-size: .82rem; font-weight: 600;
+  padding: .2rem .65rem; border-radius: 999px;
+}
+.teach .badge { background: var(--teach); color: #2a1a00; }
+.learn .badge { background: var(--learn); color: #02302c; }
+
+.card-bio { margin: 0; color: #cfc9e0; font-size: .93rem; flex: 1; }
+
+.card-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+}
+.category { font-size: .8rem; color: var(--muted); }
+
+.empty {
+  text-align: center; padding: 3rem 1rem 5rem;
+  border: 1px dashed var(--line); border-radius: var(--radius);
+}
+.empty p { margin: .25rem 0; }
+
+/* ---------- Modals (native <dialog>) ---------- */
+dialog {
+  width: min(560px, calc(100% - 1.5rem));
+  max-height: calc(100dvh - 1.5rem);
+  overflow-y: auto;
+  padding: 1.5rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+dialog::backdrop { background: rgba(8, 6, 14, .7); backdrop-filter: blur(3px); }
+dialog[open] { animation: pop .18s ease; }
+@keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.98); } }
+
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.modal-head h2 { margin: 0; font-size: 1.35rem; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+.form-grid label { display: grid; gap: .35rem; font-size: .88rem; font-weight: 600; }
+.form-grid .full { grid-column: 1 / -1; }
+.form-grid small { color: var(--muted); font-weight: 400; }
+
+.form-error { color: var(--danger); margin: .9rem 0 0; font-size: .9rem; }
+
+.modal-actions {
+  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .6rem;
+  margin-top: 1.25rem;
+}
+
+.swap-summary { margin: 0 0 1rem; color: #cfc9e0; }
+.label { display: block; margin: 1rem 0 .35rem; font-size: .8rem; font-weight: 600; color: var(--muted); }
+.contact {
+  margin: 0; padding: .7rem .9rem; border-radius: 10px;
+  background: var(--surface-2); font-weight: 600; word-break: break-all;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 1.5rem;
+  transform: translate(-50%, 150%);
+  background: var(--text); color: var(--bg);
+  padding: .65rem 1.1rem; border-radius: 999px; font-weight: 600;
+  transition: transform .25s ease;
+  z-index: 10;
+}
+.toast.show { transform: translate(-50%, 0); }
+
+/* ---------- Small screens ---------- */
+@media (max-width: 560px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .header-inner .btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

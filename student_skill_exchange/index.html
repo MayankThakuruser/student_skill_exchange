@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skill Swap · First-Year Skill Exchange</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div>
+        <h1 class="logo">Skill<span>Swap</span></h1>
+        <p class="tagline">You're good at something. So is the person down the hall. Trade.</p>
+      </div>
+      <button class="btn btn-primary" id="openPostBtn" type="button">+ Post your skill exchange</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ===== Search + filter ===== -->
+    <section class="controls" aria-label="Search and filter">
+      <label class="field grow">
+        <span class="sr-only">Search skills</span>
+        <input type="search" id="searchInput" placeholder="Search a skill: Python, German, guitar…" autocomplete="off">
+      </label>
+      <label class="field">
+        <span class="sr-only">Filter by category</span>
+        <select id="categoryFilter">
+          <option value="all">All categories</option>
+          <option>Programming &amp; Tech</option>
+          <option>Languages</option>
+          <option>Academics &amp; Math</option>
+          <option>Fitness &amp; Hobbies</option>
+        </select>
+      </label>
+    </section>
+
+    <p class="result-count" id="resultCount" aria-live="polite"></p>
+
+    <!-- Cards are rendered here by script.js -->
+    <section class="grid" id="cardGrid" aria-label="Skill exchange listings"></section>
+
+    <!-- Shown when no card matches -->
+    <div class="empty" id="emptyState" hidden>
+      <p>No swaps match that search yet.</p>
+      <p class="muted">Clear the filters, or post what you want to learn and let others find you.</p>
+    </div>
+  </main>
+
+  <!-- ===== Modal: post a swap ===== -->
+  <dialog id="postModal" aria-labelledby="postTitle">
+    <form id="postForm" method="dialog" novalidate>
+      <div class="modal-head">
+        <h2 id="postTitle">Post your skill exchange</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Close">×</button>
+      </div>
+
+      <div class="form-grid">
+        <label>Name
+          <input name="name" required maxlength="40" placeholder="Priya S.">
+        </label>
+        <label>Major / branch
+          <input name="major" required maxlength="40" placeholder="Computer Science">
+        </label>
+        <label>Skill to offer
+          <input name="offer" required maxlength="60" placeholder="Python, Discrete Math">
+          <small>Separate several skills with commas.</small>
+        </label>
+        <label>Skill to request
+          <input name="want" required maxlength="60" placeholder="Guitar">
+        </label>
+        <label>Category
+          <select name="category" required>
+            <option value="">Choose one</option>
+            <option>Programming &amp; Tech</option>
+            <option>Languages</option>
+            <option>Academics &amp; Math</option>
+            <option>Fitness &amp; Hobbies</option>
+          </select>
+        </label>
+        <label>Contact (email or Discord)
+          <input name="contact" required maxlength="60" placeholder="priya@uni.edu or priya#1234">
+        </label>
+        <label class="full">Short note <span class="muted">(optional)</span>
+          <textarea name="bio" rows="3" maxlength="160" placeholder="Free after 4pm, happy to meet at the library."></textarea>
+        </label>
+      </div>
+
+      <p class="form-error" id="formError" role="alert" hidden></p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary">Post exchange</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ===== Modal: request a swap ===== -->
+  <dialog id="swapModal" aria-labelledby="swapTitle">
+    <div class="modal-head">
+      <h2 id="swapTitle">Request a swap</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Close">×</button>
+    </div>
+
+    <p class="swap-summary" id="swapSummary"></p>
+
+    <p class="label">Contact</p>
+    <p class="contact" id="swapContact"></p>
+
+    <label class="label" for="swapMessage">Message (edit before sending)</label>
+    <textarea id="swapMessage" rows="6"></textarea>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close>Close</button>
+      <a class="btn btn-ghost" id="mailLink" href="#" hidden>Open in email</a>
+      <button type="button" class="btn btn-primary" id="copyBtn">Copy message</button>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
